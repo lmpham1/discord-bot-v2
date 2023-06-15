@@ -1,0 +1,26 @@
+# Node.js / Yarn
+node_modules/
+yarn-error.log
+.yarn/
+.pnp*
+npm-debug.log*
+yarn.lock
+
+# IDE / Editor
+.vscode/
+.idea/
+*.iml
+*.ipr
+*.iws
+.DS_Store
+*.log
+
+# Environment
+.env
+
+# Build output
+dist/
+
+# Miscellaneous
+*.bak
+*.swp
