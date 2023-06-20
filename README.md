@@ -5,13 +5,13 @@ This project is a Discord bot written in Discord.js version 14. The bot is desig
 1. Clone the repository to your local machine using the following command:
 
 ```
-git clone https://github.com/your-username/discord-bot-project.git
+git clone https://github.com/your-username/discord-bot-v2.git
 ```
 
 2. Navigate to the project directory:
 
 ```
-cd discord-bot-project
+cd discord-bot-v2
 ```
 
 3. Install the project dependencies using Yarn:
@@ -21,8 +21,8 @@ yarn install
 ```
 
 ## Configuration
-1. Rename the config.example.json file to config.json.  
-2. Open the config.json file and provide the necessary values for your Discord bot token and other configurations.
+1. Rename the `.env.example` file to `.env`
+2. Open the `.env` file and provide the necessary values for your Discord bot token and other configurations.
 
 ## Usage
 To start the bot, run the following command:
@@ -31,10 +31,10 @@ To start the bot, run the following command:
 yarn start
 ```
 
-## Features
-- Feature 1: Provide a brief description of the first feature here.
-- Feature 2: Provide a brief description of the second feature here.
-- ...
+To chat with bot in your Discord server, use the syntax:
+```
+/chat <YOUR_MESSAGE_HERE>
+```
 
 ## Contributing
 
