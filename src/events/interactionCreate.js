@@ -19,6 +19,9 @@ module.exports = {
     } catch (error) {
       console.error(`Error executing ${interaction.commandName}`);
       console.error(error);
+      await interaction.followUp(
+        'An error occurred while processing your request.'
+      );
     }
   },
 };
