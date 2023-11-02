@@ -1,20 +1,20 @@
 // api.js
 
-const { Configuration, OpenAIApi } = require('openai');
+const OpenAI = require('openai');
 
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+
 
 // Function to make the API call
 async function makeAPICall(message, thread = []) {
   try {
-    const openai = new OpenAIApi(configuration);
+    const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
     thread.push({
       role: 'user',
       content: message,
     });
-    const response = await openai.createChatCompletion({
+    const response = await openai.chat.completions.create({
       model: process.env.OPENAI_MODEL,
       messages: thread,
     });
