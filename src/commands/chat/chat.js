@@ -13,7 +13,7 @@ module.exports = {
     const user = interaction.user.username;
     await interaction.deferReply();
     const response = await makeAPICall(text);
-    const responseWithUser = `${user} said: ${text}\n\n${response}`;
+    const responseWithUser = `@${user} said: ${text}\n\n${response}`;
     await interaction.editReply(`${responseWithUser}`);
   },
 };
