@@ -1,6 +1,7 @@
 // api.js
 
 const OpenAI = require('openai');
+const logger = require('./logger');
 
 // Function to make the API call
 async function makeAPICall(message, thread = []) {
@@ -16,11 +17,11 @@ async function makeAPICall(message, thread = []) {
       model: process.env.OPENAI_MODEL,
       messages: thread,
     });
-    // console.log(data.choices);
+    logger.debug(data);
 
     return data.choices[0].message.content;
   } catch (err) {
-    console.log(err);
+    logger.error(err);
   }
 }
 
