@@ -8,6 +8,7 @@ module.exports = {
     .addStringOption((option) =>
       option.setName('input').setDescription('The input to GPT')
     ),
+  usage: '/chat_private <INPUT>',
   async execute(interaction) {
     const text = interaction.options.getString('input');
     const username = interaction.user.username;

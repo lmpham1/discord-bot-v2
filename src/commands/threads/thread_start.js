@@ -14,6 +14,7 @@ module.exports = {
     .addStringOption((option) =>
       option.setName('input').setDescription('The input to GPT')
     ),
+  usage: '/thread_start',
   async execute(interaction, client) {
     try {
       const guild = interaction.guild;
