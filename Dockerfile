@@ -15,6 +15,7 @@ FROM base AS release
 COPY --from=base /app/node_modules ./node_modules
 # Copy necessary source files and other resources
 COPY ./src ./src
+COPY ./guild_list.txt .
 
 # Define CMD
 CMD ["sh", "-c", "yarn run deploy && yarn run start"]
