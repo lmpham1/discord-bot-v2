@@ -18,7 +18,7 @@ module.exports = {
     } catch (error) {
       logger.error(`Error executing ${interaction.commandName}`);
       logger.error(error);
-      await interaction.send(
+      await interaction.reply(
         'An error occurred while processing your request.'
       );
     }

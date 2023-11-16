@@ -15,7 +15,7 @@
   },
   "scripts": {
     "start": "node src/index.js",
-    "deploy": "node src/deploy-command.js",
+    "deploy": "node src/deploy-command.js guild_list.txt",
     "dev": "cross-env LOG_LEVEL=debug nodemon ./src/index.js --watch src"
   },
   "devDependencies": {

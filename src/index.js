@@ -41,9 +41,21 @@ for (const file of eventFiles) {
   const filePath = path.join(eventsPath, file);
   const event = require(filePath);
   if (event.once) {
-    client.once(event.name, (...args) => event.execute(...args, client));
+    client.once(event.name, (...args) => {
+      try {
+        event.execute(...args, client);
+      } catch (error) {
+        console.error(`Error occurred in event ${event.name}:`, error);
+      }
+    });
   } else {
-    client.on(event.name, (...args) => event.execute(...args, client));
+    client.on(event.name, (...args) => {
+      try {
+        event.execute(...args, client);
+      } catch (error) {
+        console.error(`Error occurred in event ${event.name}:`, error);
+      }
+    });
   }
 }
 

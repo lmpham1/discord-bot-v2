@@ -5,7 +5,17 @@ const path = require('node:path');
 const logger = require('./logger');
 const token = process.env.TOKEN;
 const clientId = process.env.CLIENT_ID;
-const guildId = process.env.GUILD_ID;
+
+const guildIdsFile = process.argv[2];
+if (!fs.existsSync(guildIdsFile)) {
+  logger.error(`The file ${guildIdsFile} does not exist.`);
+  process.exit(1);
+}
+
+const guildIds = fs
+  .readFileSync(guildIdsFile, 'utf8')
+  .split('\n')
+  .filter(Boolean);
 
 const commands = [];
 // Grab all the command files from the commands directory you created earlier
@@ -38,19 +48,20 @@ const rest = new REST().setToken(token);
 // and deploy your commands!
 (async () => {
   try {
-    logger.info(
-      `Started refreshing ${commands.length} application (/) commands.`
-    );
+    for (const guildId of guildIds) {
+      logger.info(
+        `Started refreshing ${commands.length} application (/) commands in ${guildId}.`
+      );
 
-    // The put method is used to fully refresh all commands in the guild with the current set
-    const data = await rest.put(
-      Routes.applicationGuildCommands(clientId, guildId),
-      { body: commands }
-    );
+      const data = await rest.put(
+        Routes.applicationGuildCommands(clientId, guildId),
+        { body: commands }
+      );
 
-    logger.info(
-      `Successfully reloaded ${data.length} application (/) commands.`
-    );
+      logger.info(
+        `Successfully reloaded ${data.length} application (/) commands in guild ${guildId}.`
+      );
+    }
   } catch (error) {
     // And of course, make sure you catch and log any errors!
     logger.error(error);
