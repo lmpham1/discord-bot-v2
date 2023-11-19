@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
 const generateAnswer = require('../../functions/generateAnswer');
+const { makeChatCompletionCall } = require('../../api');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -13,7 +14,11 @@ module.exports = {
     const text = interaction.options.getString('input');
     const username = interaction.user.username;
     await interaction.deferReply({ ephemeral: true });
-    const response = await generateAnswer(text, username);
+    const response = await generateAnswer(
+      text,
+      makeChatCompletionCall,
+      username
+    );
     await interaction.editReply(response);
   },
 };

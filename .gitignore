@@ -24,8 +24,5 @@ dist/
 # Miscellaneous
 *.bak
 *.swp
-<<<<<<< HEAD
 guild_list.txt
-=======
 restart-docker.sh
->>>>>>> ee55564351a779482825456f7180c9242c7a7f0a

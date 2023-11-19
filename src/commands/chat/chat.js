@@ -1,4 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
+const { makeChatCompletionCall } = require('../../api');
 const generateAnswer = require('../../functions/generateAnswer');
 
 module.exports = {
@@ -13,7 +14,11 @@ module.exports = {
     const text = interaction.options.getString('input');
     const username = interaction.user.username;
     await interaction.deferReply();
-    const response = await generateAnswer(text, username);
+    const response = await generateAnswer(
+      text,
+      makeChatCompletionCall,
+      username
+    );
     await interaction.editReply(response);
   },
 };

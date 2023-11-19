@@ -4,8 +4,9 @@ const {
   PermissionFlagsBits,
 } = require('discord.js');
 const { v4: uuidv4 } = require('uuid');
-const { makeAPICall } = require('../../api');
 const logger = require('../../logger');
+const { makeThreadRunCall, makeObjectCreationCall } = require('../../api');
+const generateAnswer = require('../../functions/generateAnswer');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -17,6 +18,9 @@ module.exports = {
   usage: '/thread_start',
   async execute(interaction, client) {
     try {
+      // Acknowledge the interaction without sending a public response
+      await interaction.deferReply({ ephemeral: true });
+
       const guild = interaction.guild;
       // The user who initiated the thread
       const user = interaction.user;
@@ -53,34 +57,45 @@ module.exports = {
       }
 
       // Create a private thread in the 'gpt-threads' channel
-      const thread = await parentChannel.threads.create({
-        name: `private-thread-${uuidv4().split('-')[0]}`,
+      const threadUID = uuidv4();
+      const discordThread = await parentChannel.threads.create({
+        name: `private-thread-${threadUID.split('-')[0]}`,
         type: ChannelType.PrivateThread,
         reason: 'Private thread for user query',
       });
 
       logger.info(`new private thread created by ${user.username}`);
 
-      await thread.join();
+      await discordThread.join();
 
-      await thread.members.add(user.id);
+      await discordThread.members.add(user.id);
+
+      const loadingMessage = await discordThread.send(
+        'OpenAI Bot is thinking...'
+      );
+
+      const assistant = await makeObjectCreationCall('assistant');
+
+      const openaiThread = await makeObjectCreationCall('thread', threadUID);
 
       const text = interaction.options.getString('input');
       let response = '';
       if (text) {
-        const results = await makeAPICall(text);
-        response = `@${user.username} said: ${text}\n\n${results}`;
+        response = await generateAnswer(
+          text,
+          interaction.user.username,
+          makeThreadRunCall,
+          assistant,
+          openaiThread
+        );
       } else {
         response =
           'New thread created, ask me anything! Use `/thread_chat <prompt>` to start';
       }
-      await thread.send(response);
+      await loadingMessage.edit(response);
 
-      // Acknowledge the interaction without sending a public response
-      await interaction.deferReply({ ephemeral: true });
       await interaction.editReply({
         content: 'Private thread created!',
-        ephemeral: true,
       });
     } catch (error) {
       logger.error(error);
@@ -88,6 +103,7 @@ module.exports = {
         content: 'There was an error while executing this command!',
         ephemeral: true,
       });
+      throw error;
     }
   },
 };
