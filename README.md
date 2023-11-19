@@ -1,5 +1,5 @@
-# Discord Bot Project
-This project is a Discord bot written in Discord.js version 14. The bot is designed to perform various tasks and enhance the functionality of Discord servers.
+# Discord GPT Bot
+This project is a Discord bot written in Discord.js version 14. The bot is designed to mimic ChatGPT in a Discord server using [`openai`](https://github.com/openai/openai-node) library.
 
 ## Installation
 1. Clone the repository to your local machine using the following command:
@@ -31,7 +31,7 @@ To start the bot, run the following command:
 yarn start
 ```
 
-To chat with bot in your Discord server, use the syntax:
+To chat with the bot in your Discord server, use the syntax:
 ```
 /chat <YOUR_MESSAGE_HERE>
 ```
