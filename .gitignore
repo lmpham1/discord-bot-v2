@@ -17,6 +17,7 @@ yarn.lock
 
 # Environment
 .env
+src/database/gpt-bot.db
 
 # Build output
 dist/

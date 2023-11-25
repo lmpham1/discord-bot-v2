@@ -55,23 +55,23 @@ async function makeObjectCreationCall(type, name = '') {
   }
 }
 
-async function makeThreadRunCall(prompt, assistant, thread) {
+async function makeThreadRunCall(prompt, assistant_id, thread_id) {
   try {
     if (!prompt) {
       throw new Error('prompt is empty');
     }
-    await openai.beta.threads.messages.create(thread.id, {
+    await openai.beta.threads.messages.create(thread_id, {
       role: 'user',
       content: prompt,
     });
-    const run = await openai.beta.threads.runs.create(thread.id, {
-      assistant_id: assistant.id,
+    const run = await openai.beta.threads.runs.create(thread_id, {
+      assistant_id: assistant_id,
     });
     let run_result = {};
     do {
-      run_result = await openai.beta.threads.runs.retrieve(thread.id, run.id);
+      run_result = await openai.beta.threads.runs.retrieve(thread_id, run.id);
     } while (run_result.status !== 'completed');
-    const response = await openai.beta.threads.messages.list(thread.id);
+    const response = await openai.beta.threads.messages.list(thread_id);
     return response.data[0].content[0].text.value;
   } catch (err) {
     logger.error(err);

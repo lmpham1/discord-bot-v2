@@ -7,15 +7,16 @@ const { v4: uuidv4 } = require('uuid');
 const logger = require('../../logger');
 const { makeThreadRunCall, makeObjectCreationCall } = require('../../api');
 const generateAnswer = require('../../functions/generateAnswer');
+const database = require('../../database');
 
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('thread_start')
-    .setDescription('Start a new thread with GPT')
+    .setDescription('Start a new thread with GPT. You can also add a prompt.')
     .addStringOption((option) =>
       option.setName('input').setDescription('The input to GPT')
     ),
-  usage: '/thread_start',
+  usage: '/thread_start (<INPUT>)',
   async execute(interaction, client) {
     try {
       // Acknowledge the interaction without sending a public response
@@ -78,6 +79,16 @@ module.exports = {
 
       const openaiThread = await makeObjectCreationCall('thread', threadUID);
 
+      await database.createThread(
+        discordThread.id,
+        openaiThread.id,
+        assistant.id
+      );
+
+      await interaction.editReply({
+        content: 'Private thread created!',
+      });
+
       const text = interaction.options.getString('input');
       let response = '';
       if (text) {
@@ -85,18 +96,14 @@ module.exports = {
           text,
           interaction.user.username,
           makeThreadRunCall,
-          assistant,
-          openaiThread
+          assistant.id,
+          openaiThread.id
         );
       } else {
         response =
           'New thread created, ask me anything! Use `/thread_chat <prompt>` to start';
       }
       await loadingMessage.edit(response);
-
-      await interaction.editReply({
-        content: 'Private thread created!',
-      });
     } catch (error) {
       logger.error(error);
       await interaction.editReply({
